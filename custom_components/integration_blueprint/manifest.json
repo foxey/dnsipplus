@@ -2,7 +2,7 @@
   "domain": "integration_blueprint",
   "name": "Integration blueprint",
   "codeowners": [
-    "@ludeeus"
+    "@foxey"
   ],
   "config_flow": true,
   "documentation": "https://github.com/ludeeus/integration_blueprint",

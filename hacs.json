@@ -1,5 +1,9 @@
 {
-    "name": "Integration blueprint",
+    "name": "DNS IP Plus",
+    "filename": "netgear_plus.zip",
     "homeassistant": "2025.2.4",
-    "hacs": "2.0.5"
+    "hacs": "2.0.5",
+    "hide_default_branch": true,
+    "render_readme": true,
+    "zip_release": true
 }
