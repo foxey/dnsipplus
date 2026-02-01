@@ -1,4 +1,4 @@
-"""Adds config flow for dnsip integration."""
+"""Adds config flow for dnsip+ integration."""
 
 from __future__ import annotations
 
@@ -88,8 +88,8 @@ async def async_validate_hostname(
     return result
 
 
-class DnsIPConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for dnsip integration."""
+class DnsIPPlusConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for dnsip+ integration."""
 
     VERSION = 1
     MINOR_VERSION = 2
@@ -98,10 +98,10 @@ class DnsIPConfigFlow(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(
         config_entry: ConfigEntry,
-    ) -> DnsIPOptionsFlowHandler:
+    ) -> DnsIPPlusOptionsFlowHandler:
         """Return Option handler."""
         del config_entry
-        return DnsIPOptionsFlowHandler()
+        return DnsIPPlusOptionsFlowHandler()
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -164,8 +164,8 @@ class DnsIPConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
 
-class DnsIPOptionsFlowHandler(OptionsFlowWithReload):
-    """Handle a option config flow for dnsip integration."""
+class DnsIPPlusOptionsFlowHandler(OptionsFlowWithReload):
+    """Handle a option config flow for dnsip+ integration."""
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None

@@ -1,8 +1,8 @@
-"""Constants for dnsip integration."""
+"""Constants for dnsip+ integration."""
 
 from homeassistant.const import Platform
 
-DOMAIN = "dnsip"
+DOMAIN = "dnsipplus"
 PLATFORMS = [Platform.SENSOR]
 
 CONF_HOSTNAME = "hostname"

@@ -1,0 +1,57 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Tj\u00e4nsten \u00e4r redan konfigurerad"
+        },
+        "error": {
+            "invalid_hostname": "Ogiltigt v\u00e4rdnamn"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "hostname": "V\u00e4rdnamnet f\u00f6r vilket DNS-fr\u00e5gan ska utf\u00f6ras",
+                    "port": "Port f\u00f6r IPv4-uppslagning",
+                    "port_ipv6": "Port f\u00f6r IPv6-uppslagning",
+                    "resolver": "Namnserver f\u00f6r IPv4-uppslagning",
+                    "resolver_ipv6": "Namnserver f\u00f6r IPv6-uppslagning"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "dnsipplus": {
+                "state_attributes": {
+                    "ip_addresses": {
+                        "name": "IP-adresser"
+                    },
+                    "querytype": {
+                        "name": "Typ av fr\u00e5ga"
+                    },
+                    "resolver": {
+                        "name": "Uppl\u00f6sare"
+                    }
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "already_configured": "Tj\u00e4nsten \u00e4r redan konfigurerad",
+            "no_options": "V\u00e4rdnamnet myip kr\u00e4ver standardresolvers och kan d\u00e4rf\u00f6r inte konfigureras."
+        },
+        "error": {
+            "invalid_resolver": "Ogiltig IP-adress eller port till resolver"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "port": "Port f\u00f6r IPv4-uppslagning",
+                    "port_ipv6": "Port f\u00f6r IPv6-uppslagning",
+                    "resolver": "Namnserver f\u00f6r IPv4-uppslagning",
+                    "resolver_ipv6": "Namnserver f\u00f6r IPv6-uppslagning"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Servis je ve\u0107 konfigurisan"
+        },
+        "error": {
+            "invalid_hostname": "Neva\u017eec\u0301i naziv hosta"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "hostname": "Naziv hosta za koji se izvr\u0161ava DNS upit",
+                    "port": "Port za IPV4 pretragu",
+                    "port_ipv6": "Port za IPV6 pretragu",
+                    "resolver": "Re\u0161ava\u010d za IPV4 pretragu",
+                    "resolver_ipv6": "Re\u0161ava\u010d za IPV6 pretragu"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "dnsipplus": {
+                "state_attributes": {
+                    "ip_addresses": {
+                        "name": "IP adresa"
+                    },
+                    "querytype": {
+                        "name": "Tip upita"
+                    },
+                    "resolver": {
+                        "name": "Re\u0161ava\u010d"
+                    }
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "already_configured": "Servis je ve\u0107 konfigurisan",
+            "no_options": "Myip host ime zahteva podrazumevane re\u0161ava\u010de i zato ne mo\u017ee biti konfigurisano."
+        },
+        "error": {
+            "invalid_resolver": "Neva\u017ee\u0107a IP adresa ili port za re\u0161ava\u010d"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "port": "Port za IPV4 pretragu",
+                    "port_ipv6": "Port za IPV6 pretragu",
+                    "resolver": "Re\u0161ava\u010d za IPV4 pretragu",
+                    "resolver_ipv6": "Re\u0161ava\u010d za IPV6 pretragu"
+                }
+            }
+        }
+    }
+}

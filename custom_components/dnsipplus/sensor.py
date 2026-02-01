@@ -51,7 +51,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the dnsip sensor entry."""
+    """Set up the dnsip+ sensor entry."""
 
     hostname = entry.data[CONF_HOSTNAME]
     name = entry.data[CONF_NAME]
@@ -71,10 +71,10 @@ async def async_setup_entry(
 
 
 class WanIpSensor(SensorEntity):
-    """Implementation of a DNS IP sensor."""
+    """Implementation of a DNS IP+ sensor."""
 
     _attr_has_entity_name = True
-    _attr_translation_key = "dnsip"
+    _attr_translation_key = "dnsipplus"
     _unrecorded_attributes = frozenset({"resolver", "querytype", "ip_addresses"})
 
     resolver: aiodns.DNSResolver
@@ -87,7 +87,7 @@ class WanIpSensor(SensorEntity):
         ipv6: bool,
         port: int,
     ) -> None:
-        """Initialize the DNS IP sensor."""
+        """Initialize the DNS IP+ sensor."""
         self._attr_name = "IPv6" if ipv6 else None
         self._attr_unique_id = f"{hostname}_{ipv6}"
         self.hostname = hostname

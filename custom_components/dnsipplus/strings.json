@@ -20,7 +20,7 @@
   },
   "entity": {
     "sensor": {
-      "dnsip": {
+      "dnsipplus": {
         "state_attributes": {
           "ip_addresses": {
             "name": "IP addresses"
@@ -46,10 +46,10 @@
     "step": {
       "init": {
         "data": {
-          "port": "[%key:component::dnsip::config::step::user::data::port%]",
-          "port_ipv6": "[%key:component::dnsip::config::step::user::data::port_ipv6%]",
-          "resolver": "[%key:component::dnsip::config::step::user::data::resolver%]",
-          "resolver_ipv6": "[%key:component::dnsip::config::step::user::data::resolver_ipv6%]"
+          "port": "[%key:component::dnsipplus::config::step::user::data::port%]",
+          "port_ipv6": "[%key:component::dnsipplus::config::step::user::data::port_ipv6%]",
+          "resolver": "[%key:component::dnsipplus::config::step::user::data::resolver%]",
+          "resolver_ipv6": "[%key:component::dnsipplus::config::step::user::data::resolver_ipv6%]"
         }
       }
     }

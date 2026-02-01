@@ -1,0 +1,57 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "T\u00e1 an tseirbh\u00eds cumraithe cheana f\u00e9in"
+        },
+        "error": {
+            "invalid_hostname": "Ainm \u00f3stach neamhbhail\u00ed"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "hostname": "An t-ainm \u00f3stach ar a nd\u00e9anfar an fiosr\u00fach\u00e1n DNS",
+                    "port": "Port do IPV4 cuardaigh",
+                    "port_ipv6": "Port do IPV6 cuardaigh",
+                    "resolver": "R\u00e9iteoir le haghaidh cuardach IPV4",
+                    "resolver_ipv6": "R\u00e9iteoir le haghaidh cuardaigh IPV6"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "dnsipplus": {
+                "state_attributes": {
+                    "ip_addresses": {
+                        "name": "Seolta\u00ed IP"
+                    },
+                    "querytype": {
+                        "name": "Cine\u00e1l fiosr\u00fach\u00e1in"
+                    },
+                    "resolver": {
+                        "name": "R\u00e9iteach"
+                    }
+                }
+            }
+        }
+    },
+    "options": {
+        "abort": {
+            "already_configured": "T\u00e1 an tseirbh\u00eds cumraithe cheana f\u00e9in",
+            "no_options": "\u00c9il\u00edonn an t-ainm \u00f3stach myip na r\u00e9iteoir\u00ed r\u00e9amhshocraithe agus d\u00e1 bhr\u00ed sin n\u00ed f\u00e9idir \u00e9 a chumr\u00fa."
+        },
+        "error": {
+            "invalid_resolver": "Seoladh IP n\u00f3 port neamhbhail\u00ed don r\u00e9iteoir"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "port": "Port do IPV4 cuardaigh",
+                    "port_ipv6": "Port do IPV6 cuardaigh",
+                    "resolver": "R\u00e9iteoir le haghaidh cuardach IPV4",
+                    "resolver_ipv6": "R\u00e9iteoir le haghaidh cuardaigh IPV6"
+                }
+            }
+        }
+    }
+}
