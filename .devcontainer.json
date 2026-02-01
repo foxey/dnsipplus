@@ -2,6 +2,16 @@
     "name": "ludeeus/integration_blueprint",
     "image": "mcr.microsoft.com/devcontainers/python:3.13",
     "postCreateCommand": "scripts/setup",
+    "mounts": [
+        {
+            "source": "${localEnv:SSH_AUTH_SOCK}",
+            "target": "/ssh-agent",
+            "type": "bind"
+        }
+    ],
+    "remoteEnv": {
+        "SSH_AUTH_SOCK": "/ssh-agent"
+    },
     "forwardPorts": [
         8123
     ],
@@ -14,7 +24,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "charliermarsh.ruff",
+                "astral-sh.ruff",
                 "github.vscode-pull-request-github",
                 "ms-python.python",
                 "ms-python.vscode-pylance",
@@ -31,7 +41,7 @@
                 "python.analysis.autoImportCompletions": true,
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
                 "[python]": {
-                    "editor.defaultFormatter": "charliermarsh.ruff"
+                    "editor.defaultFormatter": "astral-sh.ruff"
                 }
             }
         }
