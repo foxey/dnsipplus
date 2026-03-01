@@ -6,6 +6,7 @@ import asyncio
 from datetime import timedelta
 from ipaddress import IPv4Address, IPv6Address
 import logging
+import time
 from typing import Literal
 
 import aiodns
@@ -75,7 +76,7 @@ class WanIpSensor(SensorEntity):
 
     _attr_has_entity_name = True
     _attr_translation_key = "dnsipplus"
-    _unrecorded_attributes = frozenset({"resolver", "querytype", "ip_addresses"})
+    _unrecorded_attributes = frozenset({"resolver", "querytype", "ip_addresses", "response_time_ms"})
 
     resolver: aiodns.DNSResolver
 
@@ -98,6 +99,7 @@ class WanIpSensor(SensorEntity):
         self._attr_extra_state_attributes = {
             "resolver": nameserver,
             "querytype": self.querytype,
+            "response_time_ms": None,
         }
         self._attr_device_info = DeviceInfo(
             entry_type=DeviceEntryType.SERVICE,
@@ -119,15 +121,19 @@ class WanIpSensor(SensorEntity):
         if self.resolver._closed:  # noqa: SLF001
             self.create_dns_resolver()
         response = None
+        start_time = time.perf_counter()
         try:
             async with asyncio.timeout(10):
                 response = await self.resolver.query(self.hostname, self.querytype)
+            response_time = round((time.perf_counter() - start_time) * 1000, 2)
         except TimeoutError as err:
             _LOGGER.debug("Timeout while resolving host: %s", err)
             await self.resolver.close()
+            response_time = None
         except DNSError as err:
             _LOGGER.warning("Exception while resolving host: %s", err)
             await self.resolver.close()
+            response_time = None
 
         if response:
             sorted_ips = sort_ips(
@@ -135,6 +141,7 @@ class WanIpSensor(SensorEntity):
             )
             self._attr_native_value = sorted_ips[0]
             self._attr_extra_state_attributes["ip_addresses"] = sorted_ips
+            self._attr_extra_state_attributes["response_time_ms"] = response_time
             self._attr_available = True
             self._retries = DEFAULT_RETRIES
         elif self._retries > 0:
