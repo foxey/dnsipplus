@@ -250,8 +250,6 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def _validate_resolver_address(self, address: str) -> bool:
         """Validate resolver address format (IPv4, IPv6, or hostname)."""
-        import re
-
         # Try IPv4
         with contextlib.suppress(ValueError):
             ipaddress.IPv4Address(address)
@@ -381,8 +379,6 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
 
     def _validate_resolver_address(self, address: str) -> bool:
         """Validate resolver address format (IPv4, IPv6, or hostname)."""
-        import re
-
         with contextlib.suppress(ValueError):
             ipaddress.IPv4Address(address)
             return True
@@ -396,8 +392,6 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
 
     def _validate_domain_name(self, domain: str) -> bool:
         """Validate domain name format (DNS name format)."""
-        import re
-
         domain = domain.rstrip(".")
         if not domain:
             return False

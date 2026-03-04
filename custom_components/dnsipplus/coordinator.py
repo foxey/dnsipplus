@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 
-def extract_dns_value(response: list, record_type: str) -> str:
+def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
     """
     Extract displayable value from DNS response.
 

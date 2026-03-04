@@ -7,7 +7,7 @@ import logging
 import time
 from datetime import timedelta
 from ipaddress import IPv4Address, IPv6Address
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import aiodns
 from aiodns.error import DNSError
@@ -16,12 +16,14 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, CONF_PORT, UnitOfTime
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
-from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
     CONF_DEVICE_NAME,
@@ -83,9 +85,13 @@ async def _async_setup_legacy_sensors(
 
     entities = []
     if entry.data[CONF_IPV4]:
-        entities.append(WanIpSensor(name, hostname, nameserver_ipv4, False, port_ipv4))
+        entities.append(
+            WanIpSensor(name, hostname, nameserver_ipv4, False, port_ipv4)  # noqa: FBT003
+        )
     if entry.data[CONF_IPV6]:
-        entities.append(WanIpSensor(name, hostname, nameserver_ipv6, True, port_ipv6))
+        entities.append(
+            WanIpSensor(name, hostname, nameserver_ipv6, True, port_ipv6)  # noqa: FBT003
+        )
 
     async_add_entities(entities, update_before_add=True)
 
@@ -107,16 +113,16 @@ async def _async_setup_dns_resolver_sensors(
     entities.append(DnsResponseTimeSensor(coordinator, entry, device_name))
 
     # Add domain monitor sensors for each configured domain
-    for monitor in coordinator.domain_monitors:
-        entities.append(
-            DomainMonitorSensor(
-                coordinator=coordinator,
-                config_entry_id=entry.entry_id,
-                device_name=device_name,
-                domain=monitor.domain,
-                record_type=monitor.record_type,
-            )
+    entities.extend(
+        DomainMonitorSensor(
+            coordinator=coordinator,
+            config_entry_id=entry.entry_id,
+            device_name=device_name,
+            domain=monitor.domain,
+            record_type=monitor.record_type,
         )
+        for monitor in coordinator.domain_monitors
+    )
 
     # Add all entities
     async_add_entities(entities)
@@ -212,7 +218,10 @@ class DnsResponseTimeSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(
-        self, coordinator: DnsResolverCoordinator, config_entry: ConfigEntry, device_name: str
+        self,
+        coordinator: DnsResolverCoordinator,
+        config_entry: ConfigEntry,
+        device_name: str,
     ) -> None:
         """Initialize the DNS response time sensor."""
         super().__init__(coordinator)
