@@ -86,21 +86,21 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
 
     # Handle PTR/NS records - return hostname(s)
     elif record_type in ("PTR", "NS"):
-        # NS records have data.nsdname, PTR records have data.ptrname
+        # NS records have data.nsdname, PTR records have data.dname
         if len(response) > 1:
             names = []
             for r in response:
                 if hasattr(r.data, "nsdname"):
                     names.append(r.data.nsdname)
-                elif hasattr(r.data, "ptrname"):
-                    names.append(r.data.ptrname)
+                elif hasattr(r.data, "dname"):
+                    names.append(r.data.dname)
                 else:
                     names.append(str(r.data))
             result = ", ".join(sorted(names))
         elif hasattr(response[0].data, "nsdname"):
             result = response[0].data.nsdname
-        elif hasattr(response[0].data, "ptrname"):
-            result = response[0].data.ptrname
+        elif hasattr(response[0].data, "dname"):
+            result = response[0].data.dname
         else:
             result = str(response[0].data)
 
