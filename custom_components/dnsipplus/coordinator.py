@@ -104,9 +104,15 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
         else:
             result = str(response[0].data)
 
-    # Handle SOA records - return primary nameserver
+    # Handle SOA records - return comprehensive SOA information
     elif record_type == "SOA":
-        result = response[0].data.mname
+        # SOA has: mname, rname, serial, refresh, retry, expire, minimum
+        soa = response[0].data
+        result = (
+            f"{soa.mname} {soa.rname} "
+            f"(serial: {soa.serial}, refresh: {soa.refresh}, "
+            f"retry: {soa.retry}, expire: {soa.expire}, min: {soa.minimum})"
+        )
 
     # Handle SRV records - return service records with priority/weight/port
     elif record_type == "SRV":
