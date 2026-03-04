@@ -46,7 +46,8 @@ class TestDnsResolverMonitoringOptionsFlowReload:
 
         # Verify that the options flow is an instance of OptionsFlowWithReload
         assert isinstance(options_flow, OptionsFlowWithReload), (
-            "DnsResolverMonitoringOptionsFlow must extend OptionsFlowWithReload to trigger automatic reload"
+            "DnsResolverMonitoringOptionsFlow must extend "
+            "OptionsFlowWithReload to trigger automatic reload"
         )
 
     async def test_options_flow_save_triggers_reload(self, hass):

@@ -1,7 +1,7 @@
 {
     "name": "DNS IP Plus",
     "filename": "dnsipplus.zip",
-    "homeassistant": "2025.2.4",
+    "homeassistant": "2026.2.0",
     "hacs": "2.0.5",
     "hide_default_branch": true,
     "render_readme": true,

@@ -100,8 +100,9 @@ async def test_property_15_availability_recovery(query_sequence):
                 # For failures, availability depends on consecutive failure count
                 elif result.consecutive_failures >= CONSECUTIVE_FAILURES_THRESHOLD:
                     assert result.resolver_available is False, (
-                        f"Device should be unavailable after {CONSECUTIVE_FAILURES_THRESHOLD} "
-                        f"consecutive failures, but resolver_available={result.resolver_available}"
+                        f"Device should be unavailable after "
+                        f"{CONSECUTIVE_FAILURES_THRESHOLD} consecutive failures, "
+                        f"but resolver_available={result.resolver_available}"
                     )
 
 
@@ -182,7 +183,8 @@ async def test_property_15_recovery_from_unavailable(failures_before, successes_
                 # After ANY successful query, device must be available
                 assert result.resolver_available is True, (
                     f"Device should be available after successful query "
-                    f"(was_unavailable={was_unavailable}, failures_before={failures_before}), "
+                    f"(was_unavailable={was_unavailable}, "
+                    f"failures_before={failures_before}), "
                     f"but resolver_available={result.resolver_available}"
                 )
                 assert coordinator._consecutive_failures == 0, (
@@ -286,7 +288,8 @@ def test_property_4_valid_ipv4_addresses(octet1, octet2, octet3, octet4):
 
 @settings(max_examples=100, deadline=None)
 @given(
-    # Generate valid hostname labels (1-63 chars, alphanumeric and hyphens, not starting/ending with hyphen)
+    # Generate valid hostname labels (1-63 chars, alphanumeric and hyphens,
+    # not starting/ending with hyphen)
     labels=st.lists(
         st.text(
             alphabet=st.characters(
@@ -360,7 +363,8 @@ def test_property_4_invalid_addresses(invalid_input):
 
     Property: Invalid addresses should be rejected by the validator.
 
-    This test generates various types of invalid addresses and verifies they are rejected.
+    This test generates various types of invalid addresses and verifies
+    they are rejected.
     """
     from custom_components.dnsipplus.config_flow import (
         DnsResolverMonitoringConfigFlow,

@@ -115,7 +115,8 @@ class TestDnsResolverMonitoringConfigFlow:
         flow.hass = hass
         flow.context = {}  # Initialize context
 
-        # Note: "256.256.256.256" is invalid as IP but valid as hostname (digits are allowed)
+        # Note: "256.256.256.256" is invalid as IP but valid as hostname
+        # (digits are allowed)
         # Step 1: User input
         result = await flow.async_step_user(
             user_input={
