@@ -7,8 +7,8 @@ Home Assistant custom component (Python-based integration)
 ## Core Dependencies
 
 - Python 3.x
-- Home Assistant >= 2025.10.2
-- aiodns 3.6.1 (async DNS resolver library)
+- Home Assistant >= 2026.2.0
+- aiodns 4.0.0 (async DNS resolver library)
 
 ## Development Tools
 
@@ -46,4 +46,4 @@ Initial setup script (if needed for environment preparation).
 
 - HACS compatible (zip release)
 - Minimum HACS version: 2.0.5
-- Minimum Home Assistant version: 2025.10.2
+- Minimum Home Assistant version: 2026.2.0
