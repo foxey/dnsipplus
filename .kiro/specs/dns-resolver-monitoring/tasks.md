@@ -158,28 +158,28 @@ Key architectural changes:
     - Assign entity to parent device
     - _Requirements: 9.1, 9.2, 9.5_
   
-  - [~] 6.3 Write property test for response time entity creation (Property 6)
+  - [ ] 6.3 Write property test for response time entity creation (Property 6)
     - **Property 6: Response Time Entity Creation**
     - **Validates: Requirements 3.1**
     - Generate random resolver configurations
     - Verify exactly one response time entity created per device
     - Run minimum 100 iterations
   
-  - [~] 6.4 Write property test for response time entity configuration (Property 7)
+  - [ ] 6.4 Write property test for response time entity configuration (Property 7)
     - **Property 7: Response Time Entity Configuration**
     - **Validates: Requirements 3.4, 3.5**
     - Generate random response time entities
     - Verify device_class is DURATION and unit is MILLISECONDS
     - Run minimum 100 iterations
   
-  - [~] 6.5 Write property test for response time state on success (Property 8)
+  - [ ] 6.5 Write property test for response time state on success (Property 8)
     - **Property 8: Response Time State on Success**
     - **Validates: Requirements 3.2**
     - Generate random successful query results with durations
     - Verify entity state updates to query duration in milliseconds
     - Run minimum 100 iterations
   
-  - [~] 6.6 Write property test for response time state on failure (Property 9)
+  - [ ] 6.6 Write property test for response time state on failure (Property 9)
     - **Property 9: Response Time State on Failure**
     - **Validates: Requirements 3.3**
     - Generate random failed query results
@@ -205,28 +205,28 @@ Key architectural changes:
     - Assign entity to parent device
     - _Requirements: 9.1, 9.3, 9.5_
   
-  - [~] 7.4 Write property test for domain monitor entity creation (Property 11)
+  - [ ] 7.4 Write property test for domain monitor entity creation (Property 11)
     - **Property 11: Domain Monitor Entity Creation**
     - **Validates: Requirements 5.1**
     - Generate random lists of domain monitor configurations
     - Verify exactly one entity created per configuration
     - Run minimum 100 iterations
   
-  - [~] 7.5 Write property test for domain monitor entity attributes (Property 12)
+  - [ ] 7.5 Write property test for domain monitor entity attributes (Property 12)
     - **Property 12: Domain Monitor Entity Attributes**
     - **Validates: Requirements 5.4, 5.5**
     - Generate random domain monitor entities
     - Verify record_type and response_time_ms attributes present
     - Run minimum 100 iterations
   
-  - [~] 7.6 Write property test for domain monitor state on success (Property 13)
+  - [ ] 7.6 Write property test for domain monitor state on success (Property 13)
     - **Property 13: Domain Monitor State on Success**
     - **Validates: Requirements 5.2**
     - Generate random successful domain query results
     - Verify entity state updates to resolved value
     - Run minimum 100 iterations
   
-  - [~] 7.7 Write property test for domain monitor state on failure (Property 14)
+  - [ ] 7.7 Write property test for domain monitor state on failure (Property 14)
     - **Property 14: Domain Monitor State on Failure**
     - **Validates: Requirements 5.3**
     - Generate random failed domain query results
@@ -259,14 +259,14 @@ Key architectural changes:
     - Add all entities to Home Assistant
     - _Requirements: 3.1, 5.1_
   
-  - [~] 9.4 Write property test for config flow creates device (Property 1)
+  - [ ] 9.4 Write property test for config flow creates device (Property 1)
     - **Property 1: Config Flow Creates Device**
     - **Validates: Requirements 1.2**
     - Generate random valid resolver configurations
     - Verify exactly one device created with matching configuration
     - Run minimum 100 iterations
   
-  - [~] 9.5 Write property test for device removal cleanup (Property 3)
+  - [ ] 9.5 Write property test for device removal cleanup (Property 3)
     - **Property 3: Device Removal Cleanup**
     - **Validates: Requirements 1.4**
     - Generate random resolver devices with entities
@@ -274,21 +274,21 @@ Key architectural changes:
     - Run minimum 100 iterations
 
 - [ ] 10. Implement multi-device independence
-  - [~] 10.1 Write property test for device state independence (Property 2)
+  - [ ] 10.1 Write property test for device state independence (Property 2)
     - **Property 2: Device State Independence**
     - **Validates: Requirements 1.3**
     - Generate random sets of multiple resolver devices
     - Update one device state and verify others unchanged
     - Run minimum 100 iterations
   
-  - [~] 10.2 Write property test for cascading unavailability (Property 17)
+  - [ ] 10.2 Write property test for cascading unavailability (Property 17)
     - **Property 17: Cascading Unavailability**
     - **Validates: Requirements 6.4**
     - Generate random resolver devices with domain monitors
     - Mark device unavailable and verify all domain monitors unavailable
     - Run minimum 100 iterations
   
-  - [~] 10.3 Write property test for response time reflects device availability (Property 16)
+  - [ ] 10.3 Write property test for response time reflects device availability (Property 16)
     - **Property 16: Response Time Reflects Device Availability**
     - **Validates: Requirements 6.3**
     - Generate random resolver devices with varying availability
@@ -296,21 +296,21 @@ Key architectural changes:
     - Run minimum 100 iterations
 
 - [ ] 11. Implement entity naming and organization
-  - [~] 11.1 Write property test for entity naming conventions (Property 21)
+  - [ ] 11.1 Write property test for entity naming conventions (Property 21)
     - **Property 21: Entity Naming Conventions**
     - **Validates: Requirements 9.2, 9.3**
     - Generate random device names, domain names, record types
     - Verify entity names follow "{D} Response Time" and "{D} {M} {R}" patterns
     - Run minimum 100 iterations
   
-  - [~] 11.2 Write property test for entity ID uniqueness (Property 22)
+  - [ ] 11.2 Write property test for entity ID uniqueness (Property 22)
     - **Property 22: Entity ID Uniqueness**
     - **Validates: Requirements 9.5**
     - Generate random sets of entities
     - Verify all entity IDs unique and follow "dnsipplus_{device_id}_{entity_type}_{identifier}" pattern
     - Run minimum 100 iterations
   
-  - [~] 11.3 Write property test for entity device assignment (Property 20)
+  - [ ] 11.3 Write property test for entity device assignment (Property 20)
     - **Property 20: Entity Device Assignment**
     - **Validates: Requirements 9.1**
     - Generate random entities from resolver devices
@@ -325,7 +325,7 @@ Key architectural changes:
     - Use Home Assistant's standard logging with colorlog
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
   
-  - [~] 12.2 Write property test for exception handling robustness (Property 19)
+  - [ ] 12.2 Write property test for exception handling robustness (Property 19)
     - **Property 19: Exception Handling Robustness**
     - **Validates: Requirements 8.4**
     - Generate random DNS queries that raise various exceptions
@@ -333,7 +333,7 @@ Key architectural changes:
     - Verify subsequent queries continue processing
     - Run minimum 100 iterations
   
-  - [~] 12.3 Write property test for DNS error logging with context (Property 23)
+  - [ ] 12.3 Write property test for DNS error logging with context (Property 23)
     - **Property 23: DNS Error Logging with Context**
     - **Validates: Requirements 8.5, 12.1, 12.5**
     - Generate random DNS query failures

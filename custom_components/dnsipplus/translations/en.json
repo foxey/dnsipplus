@@ -4,7 +4,11 @@
             "already_configured": "Service is already configured"
         },
         "error": {
-            "invalid_hostname": "Invalid hostname"
+            "invalid_hostname": "Invalid hostname",
+            "invalid_resolver_address": "Invalid resolver address. Must be a valid IPv4 address, IPv6 address, or hostname.",
+            "invalid_domain_name": "Invalid domain name. Must be a valid DNS name format (e.g., example.com).",
+            "domain_required": "Domain name is required when adding a monitor.",
+            "no_domains_configured": "At least one domain monitor must be configured."
         },
         "step": {
             "user": {
@@ -13,7 +17,20 @@
                     "port": "Port for IPV4 lookup",
                     "port_ipv6": "Port for IPV6 lookup",
                     "resolver": "Resolver for IPV4 lookup",
-                    "resolver_ipv6": "Resolver for IPV6 lookup"
+                    "resolver_ipv6": "Resolver for IPV6 lookup",
+                    "device_name": "Device name",
+                    "resolver_address": "Resolver address (IP or hostname)",
+                    "resolver_port": "Resolver port",
+                    "query_interval": "Query interval (seconds)"
+                }
+            },
+            "domains": {
+                "title": "Configure Domain Monitors",
+                "description": "Add domain monitors to track specific DNS records.\n\nCurrently configured monitors:\n{monitors}",
+                "data": {
+                    "add_another": "Add a domain monitor",
+                    "domain": "Domain name",
+                    "record_type": "DNS record type"
                 }
             }
         }
@@ -41,15 +58,42 @@
             "no_options": "The myip hostname requires the default resolvers and therefore cannot be configured."
         },
         "error": {
-            "invalid_resolver": "Invalid IP address or port for resolver"
+            "invalid_resolver": "Invalid IP address or port for resolver",
+            "invalid_resolver_address": "Invalid resolver address. Must be a valid IPv4 address, IPv6 address, or hostname.",
+            "invalid_domain_name": "Invalid domain name. Must be a valid DNS name format (e.g., example.com).",
+            "domain_required": "Domain name is required when adding a monitor."
         },
         "step": {
             "init": {
+                "title": "Configure DNS Resolver Monitor",
+                "description": "Configure the DNS resolver and domain monitors.\n\nCurrently configured monitors:\n{monitors}",
                 "data": {
                     "port": "Port for IPV4 lookup",
                     "port_ipv6": "Port for IPV6 lookup",
                     "resolver": "Resolver for IPV4 lookup",
-                    "resolver_ipv6": "Resolver for IPV6 lookup"
+                    "resolver_ipv6": "Resolver for IPV6 lookup",
+                    "resolver_address": "Resolver address (IP or hostname)",
+                    "resolver_port": "Resolver port",
+                    "query_interval": "Query interval (seconds)",
+                    "action": "Action"
+                },
+                "data_description": {
+                    "action": "Choose an action: save configuration, add a domain monitor, or remove domain monitors"
+                }
+            },
+            "add_domain": {
+                "title": "Add Domain Monitor",
+                "description": "Add a new domain to monitor for DNS resolution.",
+                "data": {
+                    "domain": "Domain name",
+                    "record_type": "DNS record type"
+                }
+            },
+            "remove_domain": {
+                "title": "Remove Domain Monitors",
+                "description": "Select the domain monitors you want to remove.",
+                "data": {
+                    "remove_indices": "Domains to remove"
                 }
             }
         }

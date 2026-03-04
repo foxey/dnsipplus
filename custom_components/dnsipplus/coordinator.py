@@ -51,7 +51,12 @@ def extract_dns_value(response: list, record_type: str) -> str:
 
     # Handle A/AAAA records - return first IP or comma-separated list
     if record_type in ("A", "AAAA"):
-        hosts = [r.data.addr for r in response]
+        # Filter to only get A/AAAA records (exclude CNAME records that may be in response)
+        hosts = [r.data.addr for r in response if hasattr(r.data, 'addr')]
+        if not hosts:
+            return ""
+        # Sort to prevent round-robin order changes
+        hosts = sorted(hosts)
         result = hosts[0] if len(hosts) == 1 else ", ".join(hosts)
 
     # Handle MX records - return mail servers with priority
@@ -71,11 +76,17 @@ def extract_dns_value(response: list, record_type: str) -> str:
                 txt_values.append(text_data.decode("utf-8", errors="replace"))
             else:
                 txt_values.append(str(text_data))
-        result = ", ".join(txt_values)
+        # Sort to prevent round-robin order changes
+        result = ", ".join(sorted(txt_values))
 
     # Handle CNAME/PTR/NS records - return hostname(s)
     elif record_type in ("CNAME", "PTR", "NS"):
-        result = response[0].data.name if hasattr(response[0].data, "name") else str(response[0].data)
+        # For multiple records, sort them
+        if len(response) > 1:
+            names = [r.data.name if hasattr(r.data, "name") else str(r.data) for r in response]
+            result = ", ".join(sorted(names))
+        else:
+            result = response[0].data.name if hasattr(response[0].data, "name") else str(response[0].data)
 
     # Handle SOA records - return primary nameserver
     elif record_type == "SOA":

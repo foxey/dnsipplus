@@ -7,7 +7,8 @@
       "invalid_hostname": "Invalid hostname",
       "invalid_resolver_address": "Invalid resolver address. Must be a valid IPv4 address, IPv6 address, or hostname.",
       "invalid_domain_name": "Invalid domain name. Must be a valid DNS name format (e.g., example.com).",
-      "domain_required": "Domain name is required when adding a monitor."
+      "domain_required": "Domain name is required when adding a monitor.",
+      "no_domains_configured": "At least one domain monitor must be configured."
     },
     "step": {
       "user": {
@@ -57,15 +58,42 @@
       "no_options": "The myip hostname requires the default resolvers and therefore cannot be configured."
     },
     "error": {
-      "invalid_resolver": "Invalid IP address or port for resolver"
+      "invalid_resolver": "Invalid IP address or port for resolver",
+      "invalid_resolver_address": "[%key:component::dnsipplus::config::error::invalid_resolver_address%]",
+      "invalid_domain_name": "[%key:component::dnsipplus::config::error::invalid_domain_name%]",
+      "domain_required": "[%key:component::dnsipplus::config::error::domain_required%]"
     },
     "step": {
       "init": {
+        "title": "Configure DNS Resolver Monitor",
+        "description": "Configure the DNS resolver and domain monitors.\n\nCurrently configured monitors:\n{monitors}",
         "data": {
           "port": "[%key:component::dnsipplus::config::step::user::data::port%]",
           "port_ipv6": "[%key:component::dnsipplus::config::step::user::data::port_ipv6%]",
           "resolver": "[%key:component::dnsipplus::config::step::user::data::resolver%]",
-          "resolver_ipv6": "[%key:component::dnsipplus::config::step::user::data::resolver_ipv6%]"
+          "resolver_ipv6": "[%key:component::dnsipplus::config::step::user::data::resolver_ipv6%]",
+          "resolver_address": "[%key:component::dnsipplus::config::step::user::data::resolver_address%]",
+          "resolver_port": "[%key:component::dnsipplus::config::step::user::data::resolver_port%]",
+          "query_interval": "[%key:component::dnsipplus::config::step::user::data::query_interval%]",
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Choose an action: save configuration, add a domain monitor, or remove domain monitors"
+        }
+      },
+      "add_domain": {
+        "title": "Add Domain Monitor",
+        "description": "Add a new domain to monitor for DNS resolution.",
+        "data": {
+          "domain": "[%key:component::dnsipplus::config::step::domains::data::domain%]",
+          "record_type": "[%key:component::dnsipplus::config::step::domains::data::record_type%]"
+        }
+      },
+      "remove_domain": {
+        "title": "Remove Domain Monitors",
+        "description": "Select the domain monitors you want to remove.",
+        "data": {
+          "remove_indices": "Domains to remove"
         }
       }
     }

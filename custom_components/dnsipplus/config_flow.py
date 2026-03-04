@@ -292,7 +292,8 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
         domain = domain.rstrip(".")
         if not domain:
             return False
-        domain_pattern = r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        # Allow underscores for SRV records (e.g., _service._proto.domain.com)
+        domain_pattern = r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
         return bool(re.match(domain_pattern, domain))
 
     async def async_step_user(
@@ -395,7 +396,8 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
         domain = domain.rstrip(".")
         if not domain:
             return False
-        domain_pattern = r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        # Allow underscores for SRV records (e.g., _service._proto.domain.com)
+        domain_pattern = r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
         return bool(re.match(domain_pattern, domain))
 
     async def async_step_init(
