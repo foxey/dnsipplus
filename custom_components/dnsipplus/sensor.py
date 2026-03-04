@@ -68,7 +68,7 @@ async def async_setup_entry(
 
 
 async def _async_setup_legacy_sensors(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001
     entry: ConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
@@ -138,7 +138,7 @@ class WanIpSensor(SensorEntity):
         name: str,
         hostname: str,
         nameserver: str,
-        ipv6: bool,
+        ipv6: bool,  # noqa: FBT001
         port: int,
     ) -> None:
         """Initialize the DNS IP+ sensor."""
@@ -212,7 +212,7 @@ class DnsResponseTimeSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(
-        self, coordinator, config_entry: ConfigEntry, device_name: str
+        self, coordinator: DnsResolverCoordinator, config_entry: ConfigEntry, device_name: str
     ) -> None:
         """Initialize the DNS response time sensor."""
         super().__init__(coordinator)
@@ -281,7 +281,6 @@ class DomainMonitorSensor(CoordinatorEntity[DnsResolverCoordinator], SensorEntit
         sanitized_domain = domain.replace(".", "_")
 
         # Set entity naming and unique ID
-        # Name: "{device_name} {domain_name} {record_type}"
         self._attr_name = f"{device_name} {domain} {record_type}"
 
         # Unique ID: "{config_entry_id}_domain_{sanitized_domain}_{record_type}"

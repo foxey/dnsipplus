@@ -243,38 +243,15 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(
-        config_entry: ConfigEntry,
-    ) -> "DnsResolverMonitoringOptionsFlow":
-        """Return the options flow handler."""
-        return DnsResolverMonitoringOptionsFlow()
-
-
-# DNS Resolver Monitoring Config Flow
-
-
-class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle config flow for DNS resolver monitoring."""
-
-    VERSION = 2
-    MINOR_VERSION = 0
-
-    def __init__(self) -> None:
-        """Initialize the config flow."""
-        self._config_data: dict[str, Any] = {}
-        self._domain_monitors: list[dict[str, str]] = []
-
-    @staticmethod
-    @callback
-    def async_get_options_flow(
-        config_entry: ConfigEntry,
+        config_entry: ConfigEntry,  # noqa: ARG004
     ) -> DnsResolverMonitoringOptionsFlow:
         """Return the options flow handler."""
         return DnsResolverMonitoringOptionsFlow()
 
     def _validate_resolver_address(self, address: str) -> bool:
         """Validate resolver address format (IPv4, IPv6, or hostname)."""
-        import ipaddress
         import re
+
         # Try IPv4
         with contextlib.suppress(ValueError):
             ipaddress.IPv4Address(address)
@@ -284,7 +261,9 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
             ipaddress.IPv6Address(address)
             return True
         # Try hostname format (DNS name)
-        hostname_pattern = r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        hostname_pattern = (
+            r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        )
         return bool(re.match(hostname_pattern, address))
 
     def _validate_domain_name(self, domain: str) -> bool:
@@ -293,7 +272,9 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
         if not domain:
             return False
         # Allow underscores for SRV records (e.g., _service._proto.domain.com)
-        domain_pattern = r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
+        domain_pattern = (
+            r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
+        )
         return bool(re.match(domain_pattern, domain))
 
     async def async_step_user(
@@ -316,13 +297,19 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
                     "query_interval": query_interval,
                 }
                 return await self.async_step_domains()
-        data_schema = vol.Schema({
-            vol.Required("device_name"): cv.string,
-            vol.Required("resolver_address"): cv.string,
-            vol.Required("resolver_port", default=53): cv.port,
-            vol.Required("query_interval", default=60): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
-        })
-        return self.async_show_form(step_id="user", data_schema=data_schema, errors=errors)
+        data_schema = vol.Schema(
+            {
+                vol.Required("device_name"): cv.string,
+                vol.Required("resolver_address"): cv.string,
+                vol.Required("resolver_port", default=53): cv.port,
+                vol.Required("query_interval", default=60): vol.All(
+                    vol.Coerce(int), vol.Range(min=10, max=3600)
+                ),
+            }
+        )
+        return self.async_show_form(
+            step_id="user", data_schema=data_schema, errors=errors
+        )
 
     async def async_step_domains(
         self, user_input: dict[str, Any] | None = None
@@ -338,10 +325,14 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
                 elif not self._validate_domain_name(domain):
                     errors["domain"] = "invalid_domain_name"
                 if not errors:
-                    self._domain_monitors.append({"domain": domain, "record_type": record_type})
+                    self._domain_monitors.append(
+                        {"domain": domain, "record_type": record_type}
+                    )
                     return await self.async_step_domains()
             else:
-                await self.async_set_unique_id(f"{self._config_data['resolver_address']}:{self._config_data['resolver_port']}")
+                await self.async_set_unique_id(
+                    f"{self._config_data['resolver_address']}:{self._config_data['resolver_port']}"
+                )
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=self._config_data["device_name"],
@@ -357,47 +348,63 @@ class DnsResolverMonitoringConfigFlow(ConfigFlow, domain=DOMAIN):
                 )
         description_placeholders = {}
         if self._domain_monitors:
-            monitors_text = "\n".join(f"• {m['domain']} ({m['record_type']})" for m in self._domain_monitors)
+            monitors_text = "\n".join(
+                f"• {m['domain']} ({m['record_type']})" for m in self._domain_monitors
+            )
             description_placeholders["monitors"] = monitors_text
         else:
             description_placeholders["monitors"] = "None added yet"
-        data_schema = vol.Schema({
-            vol.Optional("add_another", default=True): cv.boolean,
-            vol.Optional("domain", default=""): cv.string,
-            vol.Optional("record_type", default="A"): vol.In(["A", "AAAA", "PTR", "MX", "TXT", "CNAME", "NS", "SOA", "SRV"]),
-        })
-        return self.async_show_form(step_id="domains", data_schema=data_schema, errors=errors, description_placeholders=description_placeholders)
+        data_schema = vol.Schema(
+            {
+                vol.Optional("add_another", default=True): cv.boolean,
+                vol.Optional("domain", default=""): cv.string,
+                vol.Optional("record_type", default="A"): vol.In(
+                    ["A", "AAAA", "PTR", "MX", "TXT", "CNAME", "NS", "SOA", "SRV"]
+                ),
+            }
+        )
+        return self.async_show_form(
+            step_id="domains",
+            data_schema=data_schema,
+            errors=errors,
+            description_placeholders=description_placeholders,
+        )
 
 
 class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
     """Handle options flow for DNS resolver monitoring reconfiguration."""
 
-    def __init__(self, config_entry: ConfigEntry | None = None) -> None:
+    def __init__(self, config_entry: ConfigEntry | None = None) -> None:  # noqa: ARG002
         """Initialize the options flow."""
         super().__init__()
         self._domain_monitors: list[dict[str, str]] = []
 
     def _validate_resolver_address(self, address: str) -> bool:
         """Validate resolver address format (IPv4, IPv6, or hostname)."""
-        import ipaddress
         import re
+
         with contextlib.suppress(ValueError):
             ipaddress.IPv4Address(address)
             return True
         with contextlib.suppress(ValueError):
             ipaddress.IPv6Address(address)
             return True
-        hostname_pattern = r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        hostname_pattern = (
+            r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*$"
+        )
         return bool(re.match(hostname_pattern, address))
 
     def _validate_domain_name(self, domain: str) -> bool:
         """Validate domain name format (DNS name format)."""
         import re
+
         domain = domain.rstrip(".")
         if not domain:
             return False
         # Allow underscores for SRV records (e.g., _service._proto.domain.com)
-        domain_pattern = r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
+        domain_pattern = (
+            r"^(?!-)[A-Za-z0-9_-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9_-]{1,63}(?<!-))*$"
+        )
         return bool(re.match(domain_pattern, domain))
 
     async def async_step_init(
@@ -429,7 +436,13 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
                             "resolver_port": resolver_port,
                         },
                     )
-                    return self.async_create_entry(title="", data={"query_interval": query_interval, "domain_monitors": self._domain_monitors})
+                    return self.async_create_entry(
+                        title="",
+                        data={
+                            "query_interval": query_interval,
+                            "domain_monitors": self._domain_monitors,
+                        },
+                    )
         current_data = self.config_entry.data
         current_options = self.config_entry.options
         resolver_address = current_data.get("resolver_address", "")
@@ -437,17 +450,35 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
         query_interval = current_options.get("query_interval", 60)
         description_placeholders = {}
         if self._domain_monitors:
-            monitors_text = "\n".join(f"{i+1}. {m['domain']} ({m['record_type']})" for i, m in enumerate(self._domain_monitors))
+            monitors_text = "\n".join(
+                f"{i + 1}. {m['domain']} ({m['record_type']})"
+                for i, m in enumerate(self._domain_monitors)
+            )
             description_placeholders["monitors"] = monitors_text
         else:
             description_placeholders["monitors"] = "No domain monitors configured"
-        data_schema = vol.Schema({
-            vol.Required("resolver_address", default=resolver_address): cv.string,
-            vol.Required("resolver_port", default=resolver_port): cv.port,
-            vol.Required("query_interval", default=query_interval): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
-            vol.Required("action", default="save"): vol.In({"save": "Save configuration", "add_domain": "Add domain monitor", "remove_domain": "Remove domain monitor"}),
-        })
-        return self.async_show_form(step_id="init", data_schema=data_schema, errors=errors, description_placeholders=description_placeholders)
+        data_schema = vol.Schema(
+            {
+                vol.Required("resolver_address", default=resolver_address): cv.string,
+                vol.Required("resolver_port", default=resolver_port): cv.port,
+                vol.Required("query_interval", default=query_interval): vol.All(
+                    vol.Coerce(int), vol.Range(min=10, max=3600)
+                ),
+                vol.Required("action", default="save"): vol.In(
+                    {
+                        "save": "Save configuration",
+                        "add_domain": "Add domain monitor",
+                        "remove_domain": "Remove domain monitor",
+                    }
+                ),
+            }
+        )
+        return self.async_show_form(
+            step_id="init",
+            data_schema=data_schema,
+            errors=errors,
+            description_placeholders=description_placeholders,
+        )
 
     async def async_step_add_domain(
         self, user_input: dict[str, Any] | None = None
@@ -462,13 +493,21 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
             elif not self._validate_domain_name(domain):
                 errors["domain"] = "invalid_domain_name"
             if not errors:
-                self._domain_monitors.append({"domain": domain, "record_type": record_type})
+                self._domain_monitors.append(
+                    {"domain": domain, "record_type": record_type}
+                )
                 return await self.async_step_init()
-        data_schema = vol.Schema({
-            vol.Required("domain"): cv.string,
-            vol.Required("record_type", default="A"): vol.In(["A", "AAAA", "PTR", "MX", "TXT", "CNAME", "NS", "SOA", "SRV"]),
-        })
-        return self.async_show_form(step_id="add_domain", data_schema=data_schema, errors=errors)
+        data_schema = vol.Schema(
+            {
+                vol.Required("domain"): cv.string,
+                vol.Required("record_type", default="A"): vol.In(
+                    ["A", "AAAA", "PTR", "MX", "TXT", "CNAME", "NS", "SOA", "SRV"]
+                ),
+            }
+        )
+        return self.async_show_form(
+            step_id="add_domain", data_schema=data_schema, errors=errors
+        )
 
     async def async_step_remove_domain(
         self, user_input: dict[str, Any] | None = None
@@ -486,6 +525,15 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
                         self._domain_monitors.pop(idx)
             return await self.async_step_init()
         # Use string keys for multi_select compatibility
-        monitor_options = {str(i): f"{m['domain']} ({m['record_type']})" for i, m in enumerate(self._domain_monitors)}
-        data_schema = vol.Schema({vol.Optional("remove_indices", default=[]): cv.multi_select(monitor_options)})
+        monitor_options = {
+            str(i): f"{m['domain']} ({m['record_type']})"
+            for i, m in enumerate(self._domain_monitors)
+        }
+        data_schema = vol.Schema(
+            {
+                vol.Optional("remove_indices", default=[]): cv.multi_select(
+                    monitor_options
+                )
+            }
+        )
         return self.async_show_form(step_id="remove_domain", data_schema=data_schema)

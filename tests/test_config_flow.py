@@ -36,9 +36,7 @@ class TestDnsResolverMonitoringConfigFlow:
         assert result["step_id"] == "domains"
 
         # Step 2: Finish without adding domains
-        result = await flow.async_step_domains(
-            user_input={"add_another": False}
-        )
+        result = await flow.async_step_domains(user_input={"add_another": False})
 
         assert result["type"] == FlowResultType.CREATE_ENTRY
         assert result["title"] == "Test Resolver"
@@ -64,9 +62,7 @@ class TestDnsResolverMonitoringConfigFlow:
         assert result["step_id"] == "domains"
 
         # Step 2: Finish without adding domains
-        result = await flow.async_step_domains(
-            user_input={"add_another": False}
-        )
+        result = await flow.async_step_domains(user_input={"add_another": False})
 
         assert result["type"] == FlowResultType.CREATE_ENTRY
         assert result["data"][CONF_RESOLVER_ADDRESS] == "2001:4860:4860::8888"
@@ -91,9 +87,7 @@ class TestDnsResolverMonitoringConfigFlow:
         assert result["step_id"] == "domains"
 
         # Step 2: Finish without adding domains
-        result = await flow.async_step_domains(
-            user_input={"add_another": False}
-        )
+        result = await flow.async_step_domains(user_input={"add_another": False})
 
         assert result["type"] == FlowResultType.CREATE_ENTRY
         assert result["data"][CONF_RESOLVER_ADDRESS] == "dns.google.com"
@@ -137,9 +131,7 @@ class TestDnsResolverMonitoringConfigFlow:
         assert result["step_id"] == "domains"
 
         # Step 2: Finish without adding domains
-        result = await flow.async_step_domains(
-            user_input={"add_another": False}
-        )
+        result = await flow.async_step_domains(user_input={"add_another": False})
 
         assert result["type"] == FlowResultType.CREATE_ENTRY
 
@@ -214,9 +206,7 @@ class TestDnsResolverMonitoringConfigFlow:
         assert result["step_id"] == "domains"
 
         # Step 2: Finish without adding domains
-        result = await flow.async_step_domains(
-            user_input={"add_another": False}
-        )
+        result = await flow.async_step_domains(user_input={"add_another": False})
 
         assert result["type"] == FlowResultType.CREATE_ENTRY
         assert result["data"][CONF_RESOLVER_ADDRESS] == "ns1.example.co.uk"

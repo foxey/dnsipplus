@@ -71,7 +71,9 @@ async def test_dns_resolver_setup_creates_coordinator() -> None:
             "custom_components.dnsipplus.DnsResolverCoordinator"
         ) as mock_coordinator_class,
         patch("custom_components.dnsipplus.dr.async_get") as mock_device_registry,
-        patch.object(hass.config_entries, "async_forward_entry_setups", new_callable=AsyncMock),
+        patch.object(
+            hass.config_entries, "async_forward_entry_setups", new_callable=AsyncMock
+        ),
     ):
         mock_coordinator = MagicMock()
         mock_coordinator.async_config_entry_first_refresh = AsyncMock()
@@ -124,4 +126,3 @@ async def test_unload_legacy_entry() -> None:
 
     assert result is True
     hass.config_entries.async_unload_platforms.assert_called_once()
-

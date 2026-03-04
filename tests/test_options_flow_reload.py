@@ -77,7 +77,9 @@ class TestDnsResolverMonitoringOptionsFlowReload:
         # Initialize the options flow (pass config_entry to __init__)
         options_flow = DnsResolverMonitoringOptionsFlow(config_entry)
         options_flow.hass = hass
-        options_flow.handler = config_entry.entry_id  # Set handler to enable entry_id access
+        options_flow.handler = (
+            config_entry.entry_id
+        )  # Set handler to enable entry_id access
 
         # Simulate user saving updated options
         result = await options_flow.async_step_init(
@@ -124,7 +126,9 @@ class TestDnsResolverMonitoringOptionsFlowReload:
         # Initialize the options flow (pass config_entry to __init__)
         options_flow = DnsResolverMonitoringOptionsFlow(config_entry)
         options_flow.hass = hass
-        options_flow.handler = config_entry.entry_id  # Set handler to enable entry_id access
+        options_flow.handler = (
+            config_entry.entry_id
+        )  # Set handler to enable entry_id access
 
         # Simulate user saving updated options
         result = await options_flow.async_step_init(
@@ -169,7 +173,9 @@ class TestDnsResolverMonitoringOptionsFlowReload:
         # Initialize the options flow (pass config_entry to __init__)
         options_flow = DnsResolverMonitoringOptionsFlow(config_entry)
         options_flow.hass = hass
-        options_flow.handler = config_entry.entry_id  # Set handler to enable entry_id access
+        options_flow.handler = (
+            config_entry.entry_id
+        )  # Set handler to enable entry_id access
 
         # First, load the existing monitors
         await options_flow.async_step_init()

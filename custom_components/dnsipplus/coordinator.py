@@ -51,8 +51,8 @@ def extract_dns_value(response: list, record_type: str) -> str:
 
     # Handle A/AAAA records - return first IP or comma-separated list
     if record_type in ("A", "AAAA"):
-        # Filter to only get A/AAAA records (exclude CNAME records that may be in response)
-        hosts = [r.data.addr for r in response if hasattr(r.data, 'addr')]
+        # Filter to only get A/AAAA records (exclude CNAME that may be in response)
+        hosts = [r.data.addr for r in response if hasattr(r.data, "addr")]
         if not hosts:
             return ""
         # Sort to prevent round-robin order changes
@@ -83,10 +83,17 @@ def extract_dns_value(response: list, record_type: str) -> str:
     elif record_type in ("CNAME", "PTR", "NS"):
         # For multiple records, sort them
         if len(response) > 1:
-            names = [r.data.name if hasattr(r.data, "name") else str(r.data) for r in response]
+            names = [
+                r.data.name if hasattr(r.data, "name") else str(r.data)
+                for r in response
+            ]
             result = ", ".join(sorted(names))
         else:
-            result = response[0].data.name if hasattr(response[0].data, "name") else str(response[0].data)
+            result = (
+                response[0].data.name
+                if hasattr(response[0].data, "name")
+                else str(response[0].data)
+            )
 
     # Handle SOA records - return primary nameserver
     elif record_type == "SOA":
@@ -94,7 +101,10 @@ def extract_dns_value(response: list, record_type: str) -> str:
 
     # Handle SRV records - return service records with priority/weight/port
     elif record_type == "SRV":
-        srv_records = [(r.data.priority, r.data.weight, r.data.port, r.data.target) for r in response]
+        srv_records = [
+            (r.data.priority, r.data.weight, r.data.port, r.data.target)
+            for r in response
+        ]
         result = ", ".join(
             f"{host}:{port} (p:{priority} w:{weight})"
             for priority, weight, port, host in sorted(srv_records)
