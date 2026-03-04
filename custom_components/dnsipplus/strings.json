@@ -4,7 +4,10 @@
       "already_configured": "[%key:common::config_flow::abort::already_configured_service%]"
     },
     "error": {
-      "invalid_hostname": "Invalid hostname"
+      "invalid_hostname": "Invalid hostname",
+      "invalid_resolver_address": "Invalid resolver address. Must be a valid IPv4 address, IPv6 address, or hostname.",
+      "invalid_domain_name": "Invalid domain name. Must be a valid DNS name format (e.g., example.com).",
+      "domain_required": "Domain name is required when adding a monitor."
     },
     "step": {
       "user": {
@@ -13,7 +16,20 @@
           "port": "Port for IPV4 lookup",
           "port_ipv6": "Port for IPV6 lookup",
           "resolver": "Resolver for IPV4 lookup",
-          "resolver_ipv6": "Resolver for IPV6 lookup"
+          "resolver_ipv6": "Resolver for IPV6 lookup",
+          "device_name": "Device name",
+          "resolver_address": "Resolver address (IP or hostname)",
+          "resolver_port": "Resolver port",
+          "query_interval": "Query interval (seconds)"
+        }
+      },
+      "domains": {
+        "title": "Configure Domain Monitors",
+        "description": "Add domain monitors to track specific DNS records.\n\nCurrently configured monitors:\n{monitors}",
+        "data": {
+          "add_another": "Add a domain monitor",
+          "domain": "Domain name",
+          "record_type": "DNS record type"
         }
       }
     }
