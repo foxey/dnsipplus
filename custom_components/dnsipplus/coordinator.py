@@ -51,8 +51,8 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
 
     # Handle A/AAAA records - return first IP or comma-separated list
     if record_type in ("A", "AAAA"):
-        # Filter to only get A/AAAA records (exclude CNAME that may be in response)
-        hosts = [r.data.addr for r in response if hasattr(r.data, "addr")]
+        # Records have direct 'host' attribute (not .data.addr)
+        hosts = [r.host for r in response if hasattr(r, "host")]
         if not hosts:
             return ""
         # Sort to prevent round-robin order changes
@@ -61,7 +61,8 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
 
     # Handle MX records - return mail servers with priority
     elif record_type == "MX":
-        mx_records = [(r.data.priority, r.data.exchange) for r in response]
+        # Records have direct 'host' and 'priority' attributes
+        mx_records = [(r.priority, r.host) for r in response]
         result = ", ".join(
             f"{host} ({priority})" for priority, host in sorted(mx_records)
         )
@@ -70,8 +71,8 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
     elif record_type == "TXT":
         txt_values = []
         for r in response:
-            # TXT records are stored in data.text
-            text_data = r.data.text
+            # Records have direct 'text' attribute
+            text_data = r.text
             if isinstance(text_data, bytes):
                 txt_values.append(text_data.decode("utf-8", errors="replace"))
             else:
@@ -79,30 +80,39 @@ def extract_dns_value(response: list, record_type: str) -> str:  # noqa: PLR0912
         # Sort to prevent round-robin order changes
         result = ", ".join(sorted(txt_values))
 
-    # Handle CNAME/PTR/NS records - return hostname(s)
-    elif record_type in ("CNAME", "PTR", "NS"):
-        # For multiple records, sort them
-        if len(response) > 1:
-            names = [
-                r.data.name if hasattr(r.data, "name") else str(r.data)
-                for r in response
-            ]
-            result = ", ".join(sorted(names))
+    # Handle CNAME record - return canonical name
+    elif record_type == "CNAME":
+        # CNAME response is a single result object with 'cname' attribute
+        result = response.cname if hasattr(response, "cname") else str(response)
+
+    # Handle PTR/NS records - return hostname(s)
+    elif record_type in ("PTR", "NS"):
+        # Records have direct 'host' attribute
+        if isinstance(response, list):
+            # For multiple records, sort them
+            if len(response) > 1:
+                names = [r.host for r in response if hasattr(r, "host")]
+                result = ", ".join(sorted(names))
+            else:
+                result = (
+                    response[0].host
+                    if hasattr(response[0], "host")
+                    else str(response[0])
+                )
         else:
-            result = (
-                response[0].data.name
-                if hasattr(response[0].data, "name")
-                else str(response[0].data)
-            )
+            # Single result
+            result = response.host if hasattr(response, "host") else str(response)
 
     # Handle SOA records - return primary nameserver
     elif record_type == "SOA":
-        result = response[0].data.mname
+        # SOA response is a single result object with 'nsname' attribute
+        result = response.nsname if hasattr(response, "nsname") else str(response)
 
     # Handle SRV records - return service records with priority/weight/port
     elif record_type == "SRV":
+        # Records have direct attributes: priority, weight, port, target
         srv_records = [
-            (r.data.priority, r.data.weight, r.data.port, r.data.target)
+            (r.priority, r.weight, r.port, r.target)
             for r in response
         ]
         result = ", ".join(
