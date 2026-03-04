@@ -1,46 +1,156 @@
-# Notice
+# DNS IP+
 
-The component and platforms in this repository are not meant to be used by a
-user, but as a "blueprint" that custom component developers can build
-upon, to make more awesome stuff.
+A Home Assistant custom component that monitors DNS servers and queries DNS records. Track DNS resolver response times, query various DNS record types, and monitor your public IP address via DNS.
 
-HAVE FUN! 😎
+## Features
 
-## Why?
+- **DNS Resolver Monitoring**: Track response times and availability of DNS servers
+- **Multiple Record Types**: Query A, AAAA, CNAME, MX, TXT, NS, PTR, SOA, and SRV records
+- **Domain Monitoring**: Monitor multiple domains per resolver
+- **Public IP Detection**: Use DNS queries to determine your public IPv4/IPv6 address
+- **Config Flow UI**: Easy setup through Home Assistant's UI
+- **HACS Compatible**: Install and update via HACS
 
-This is simple, by having custom_components look (README + structure) the same
-it is easier for developers to help each other and for users to start using them.
+## Installation
 
-If you are a developer and you want to add things to this "blueprint" that you think more
-developers will have use for, please open a PR to add it :)
+### HACS (Recommended)
 
-## What?
+1. Open HACS in Home Assistant
+2. Go to "Integrations"
+3. Click the three dots in the top right corner
+4. Select "Custom repositories"
+5. Add this repository URL and select "Integration" as the category
+6. Click "Install"
+7. Restart Home Assistant
 
-This repository contains multiple files, here is a overview:
+### Manual Installation
 
-File | Purpose | Documentation
--- | -- | --
-`.devcontainer.json` | Used for development/testing with Visual Studio Code. | [Documentation](https://code.visualstudio.com/docs/remote/containers)
-`.github/ISSUE_TEMPLATE/*.yml` | Templates for the issue tracker | [Documentation](https://help.github.com/en/github/building-a-strong-community/configuring-issue-templates-for-your-repository)
-`custom_components/integration_blueprint/*` | Integration files, this is where everything happens. | [Documentation](https://developers.home-assistant.io/docs/creating_component_index)
-`CONTRIBUTING.md` | Guidelines on how to contribute. | [Documentation](https://help.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors)
-`LICENSE` | The license file for the project. | [Documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository)
-`README.md` | The file you are reading now, should contain info about the integration, installation and configuration instructions. | [Documentation](https://help.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax)
-`requirements.txt` | Python packages used for development/lint/testing this integration. | [Documentation](https://pip.pypa.io/en/stable/user_guide/#requirements-files)
+1. Copy the `custom_components/dnsipplus` directory to your Home Assistant's `custom_components` directory
+2. Restart Home Assistant
 
-## How?
+## Configuration
 
-1. Create a new repository in GitHub, using this repository as a template by clicking the "Use this template" button in the GitHub UI.
-1. Open your new repository in Visual Studio Code devcontainer (Preferably with the "`Dev Containers: Clone Repository in Named Container Volume...`" option).
-1. Rename all instances of the `integration_blueprint` to `custom_components/<your_integration_domain>` (e.g. `custom_components/awesome_integration`).
-1. Rename all instances of the `Integration Blueprint` to `<Your Integration Name>` (e.g. `Awesome Integration`).
-1. Run the `scripts/develop` to start HA and test out your new integration.
+### Adding a DNS Resolver
 
-## Next steps
+1. Go to Settings → Devices & Services
+2. Click "+ Add Integration"
+3. Search for "DNS IP+"
+4. Configure your DNS resolver:
+   - **Device Name**: Friendly name for this resolver
+   - **Resolver Address**: IP address or hostname of the DNS server (e.g., `8.8.8.8`, `1.1.1.1`)
+   - **Resolver Port**: DNS port (default: 53)
+   - **Query Interval**: How often to query in seconds (default: 60)
 
-These are some next steps you may want to look into:
-- Add tests to your integration, [`pytest-homeassistant-custom-component`](https://github.com/MatthewFlamm/pytest-homeassistant-custom-component) can help you get started.
-- Add brand images (logo/icon) to https://github.com/home-assistant/brands.
-- Create your first release.
-- Share your integration on the [Home Assistant Forum](https://community.home-assistant.io/).
-- Submit your integration to [HACS](https://hacs.xyz/docs/publish/start).
+### Adding Domain Monitors
+
+After adding a resolver, you can configure domains to monitor:
+
+1. Go to the integration's options (click "Configure" on the DNS IP+ integration)
+2. Select "Add domain monitor"
+3. Configure:
+   - **Domain**: Domain name to query (e.g., `google.com`, `example.com`)
+   - **Record Type**: Type of DNS record (A, AAAA, CNAME, MX, TXT, NS, PTR, SOA, SRV)
+
+You can add multiple domains per resolver and remove them later through the options flow.
+
+## Sensors
+
+### Resolver Sensors
+
+Each DNS resolver creates the following sensors:
+
+- **Response Time**: DNS query response time in milliseconds
+- **Status**: Availability status of the DNS resolver
+
+### Domain Monitor Sensors
+
+Each domain monitor creates a sensor showing:
+
+- **A/AAAA Records**: IP addresses (sorted to prevent round-robin changes)
+- **CNAME Records**: Canonical name
+- **MX Records**: Mail servers with priority (e.g., `smtp.google.com (10)`)
+- **TXT Records**: Text values (sorted)
+- **NS Records**: Nameservers (sorted)
+- **PTR Records**: Reverse DNS hostname
+- **SOA Records**: Complete SOA information including serial, refresh, retry, expire, and minimum TTL
+- **SRV Records**: Service records with priority, weight, and port
+
+## Use Cases
+
+### Monitor Public IP Address
+
+Configure a resolver (e.g., OpenDNS at `208.67.222.222`) and add domain monitors:
+- Domain: `myip.opendns.com`, Record Type: `A` (for IPv4)
+- Domain: `myip.opendns.com`, Record Type: `AAAA` (for IPv6)
+
+### Monitor DNS Server Performance
+
+Add multiple resolvers (Google DNS, Cloudflare, your ISP's DNS) and compare response times.
+
+### Track DNS Changes
+
+Monitor your domain's DNS records to detect unauthorized changes or propagation issues.
+
+### Verify Email Configuration
+
+Query MX records to verify your domain's email server configuration.
+
+## Requirements
+
+- Home Assistant >= 2026.2.0
+- Python >= 3.13
+- aiodns >= 4.0.0
+
+## Development
+
+### Setup Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/foxey/dnsipplus.git
+cd dnsipplus
+
+# Start development environment
+scripts/develop
+```
+
+This starts a local Home Assistant instance with the integration loaded.
+
+### Linting
+
+```bash
+scripts/lint
+```
+
+Runs ruff formatter and linter with auto-fix enabled.
+
+## Troubleshooting
+
+### Resolver Shows as Unavailable
+
+- Verify the DNS server address and port are correct
+- Check if the DNS server is accessible from your Home Assistant instance
+- Some DNS servers may block queries from certain sources
+
+### Domain Monitor Shows "Unknown"
+
+- Verify the domain name is correct
+- Check if the record type exists for that domain
+- Some record types (like PTR) require specific domain formats (e.g., `1.1.1.1.in-addr.arpa`)
+
+### CNAME Errors
+
+If you see errors about CNAME records when querying A/AAAA records, this is normal. The integration filters out CNAME records that may appear in A/AAAA responses.
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Credits
+
+- Built with [aiodns](https://github.com/saghul/aiodns) for async DNS resolution
+- Uses [pycares](https://github.com/saghul/pycares) for DNS protocol handling
