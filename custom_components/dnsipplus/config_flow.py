@@ -376,6 +376,7 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
         """Initialize the options flow."""
         super().__init__()
         self._domain_monitors: list[dict[str, str]] = []
+        self._initialized = False
 
     def _validate_resolver_address(self, address: str) -> bool:
         """Validate resolver address format (IPv4, IPv6, or hostname)."""
@@ -406,9 +407,11 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
     ) -> ConfigFlowResult:
         """Handle options flow initialization."""
         errors = {}
-        if user_input is None and not self._domain_monitors:
+        # Load current monitors only on first initialization
+        if user_input is None and not self._initialized:
             current_monitors = self.config_entry.options.get("domain_monitors", [])
             self._domain_monitors = [dict(m) for m in current_monitors]
+            self._initialized = True
         if user_input is not None:
             action = user_input.get("action", "save")
             if action == "add_domain":
