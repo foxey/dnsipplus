@@ -511,9 +511,11 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
             return await self.async_step_init()
         if user_input is not None:
             remove_indices = user_input.get("remove_indices", [])
+            # Handle removal even if all domains are selected
             if remove_indices:
                 # Convert string indices back to integers
                 int_indices = [int(idx) for idx in remove_indices]
+                # Remove in reverse order to maintain correct indices
                 for idx in sorted(int_indices, reverse=True):
                     if 0 <= idx < len(self._domain_monitors):
                         self._domain_monitors.pop(idx)
@@ -525,7 +527,7 @@ class DnsResolverMonitoringOptionsFlow(OptionsFlowWithReload):
         }
         data_schema = vol.Schema(
             {
-                vol.Optional("remove_indices", default=[]): cv.multi_select(
+                vol.Required("remove_indices", default=[]): cv.multi_select(
                     monitor_options
                 )
             }
